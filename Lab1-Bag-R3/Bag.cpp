@@ -64,8 +64,55 @@ void Bag::add(TElem elem) {
 
 
 bool Bag::remove(TElem elem) {
-	//TODO - Implementation
-	return false; 
+	//find elem
+    int elemPos = -1;
+    for (int i = 0; i < bagSizeUnique; i++) {
+        //if found elempos = found[i]
+        if (uniqueArray[i] == elem) {
+            elemPos = i;
+            break;
+        }
+    }
+
+    //count occurrences
+    int counter = 0;
+    for (int j = 0; j < bagSizePos; j++) {
+        if (posArray[j] == elemPos) {
+            counter++;
+        }
+    }
+    if (counter > 1) {
+        for (int k = 0; k < bagSizePos; k++) {
+            if (posArray[k] == elemPos) {
+                posArray[k] = posArray[bagSizePos];
+                bagSizePos--;
+            }
+        }
+        return true;
+    }
+    
+    if (counter == 1)
+    {
+        for (int l = 0; l < bagSizePos; l++) 
+        {
+            if (posArray[l] == elemPos) 
+            {
+                posArray[l] = posArray[bagSizePos];
+                bagSizePos--;
+            }
+        }
+        for (int m = 0; m < bagSizePos; m++)
+        {
+            if (uniqueArray[m] == elem)
+            {
+                uniqueArray[m] = uniqueArray[bagSizeUnique];
+                bagSizeUnique--;
+            }
+        }
+    }
+  
+    
+    return false;
 }
 
 
@@ -81,21 +128,21 @@ bool Bag::search(TElem elem) const {
 }
 
 int Bag::nrOccurrences(TElem elem) const {
-    int index = -1;
+    int elemPos = -1;
     for (int i = 0; i < bagSizeUnique; i++) {
         if (uniqueArray[i] == elem) {
-            index = i;
+            elemPos = i;
             break;
         }
     }
 
-    if (index == -1) {
+    if (elemPos == -1) {
         return 0; // Element not found
     }
 
     int counter = 0;
     for (int j = 0; j < bagSizePos; j++) {
-        if (posArray[j] == index) {
+        if (posArray[j] == elemPos) {
             counter++;
         }
     }

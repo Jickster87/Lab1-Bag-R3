@@ -18,7 +18,16 @@ void BagIterator::first() {
 
 
 void BagIterator::next() {
-  //TODO
+    if (!valid()) {
+        throw exception();
+    }
+
+    freqCount++;
+
+    if (freqCount > bag.nrOccurrences(bag.uniqueArray[currentPosition])) {
+        currentPosition++;
+        freqCount = 1;
+    }
 }
 
 
