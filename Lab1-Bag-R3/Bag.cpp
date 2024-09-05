@@ -58,13 +58,12 @@ void Bag::add(TElem elem) {
         bagSizePos++;
         bagSizeUnique++;
     }
-    
-    
 }
 
 
 bool Bag::remove(TElem elem) {
-	//find elem
+	/* bad version1 xD
+    //find elem
     int elemPos = -1;
     for (int i = 0; i < bagSizeUnique; i++) {
         //if found elempos = found[i]
@@ -113,6 +112,39 @@ bool Bag::remove(TElem elem) {
   
     
     return false;
+    end of bad version 1 */
+    
+    // bad version remove 2 xDDD
+    int elempos = -1;
+    int counter = 0;
+    int i;
+    int j = 0;
+    for (i = 0; i < bagSizeUnique; i++) {
+        if (uniqueArray[i] == elem) {
+            elempos = i;
+            //count occurences in posArray
+            for (j = 0; j < bagSizePos; j++) {
+                if (posArray[j] == elempos) {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+    }
+    if (elempos == -1) {
+        return false;
+    }
+    
+    if (counter > 1) {
+        posArray[j] = posArray[bagSizePos];
+        bagSizePos--;
+        uniqueArray[i] = uniqueArray[bagSizeUnique];
+        bagSizeUnique--;
+        return true;
+    } else {posArray[j] = posArray[bagSizePos];
+        bagSizePos--;
+        return true;
+        }
 }
 
 
