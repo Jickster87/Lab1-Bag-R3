@@ -29,7 +29,7 @@ void Bag::add(TElem elem) {
        }
     //resize uniqueArray
     if (bagSizeUnique == capacityUnique) {
-        //capacityTotal *= 2;
+        capacityUnique *= 2;
            TElem* tempoArray = new TElem[capacityUnique];
            int i = 0;
            while (i < bagSizeUnique) {
@@ -62,89 +62,65 @@ void Bag::add(TElem elem) {
 
 
 bool Bag::remove(TElem elem) {
-	/* bad version1 xD
-    //find elem
-    int elemPos = -1;
-    for (int i = 0; i < bagSizeUnique; i++) {
-        //if found elempos = found[i]
-        if (uniqueArray[i] == elem) {
-            elemPos = i;
-            break;
-        }
-    }
-
-    //count occurrences
-    int counter = 0;
-    for (int j = 0; j < bagSizePos; j++) {
-        if (posArray[j] == elemPos) {
-            counter++;
-        }
-    }
-    if (counter > 1) {
-        for (int k = 0; k < bagSizePos; k++) {
-            if (posArray[k] == elemPos) {
-                posArray[k] = posArray[bagSizePos];
-                bagSizePos--;
-            }
-        }
-        return true;
-    }
-    
-    if (counter == 1)
-    {
-        for (int l = 0; l < bagSizePos; l++) 
-        {
-            if (posArray[l] == elemPos) 
-            {
-                posArray[l] = posArray[bagSizePos];
-                bagSizePos--;
-            }
-        }
-        for (int m = 0; m < bagSizePos; m++)
-        {
-            if (uniqueArray[m] == elem)
-            {
-                uniqueArray[m] = uniqueArray[bagSizeUnique];
-                bagSizeUnique--;
-            }
-        }
-    }
-  
-    
-    return false;
-    end of bad version 1 */
-    
-    // bad version remove 2 xDDD
+    // search for the elem
     int elempos = -1;
-    int counter = 0;
-    int i;
-    int j = 0;
-    for (i = 0; i < bagSizeUnique; i++) {
+    for (int i = 0; i < bagSizeUnique; i++) {
         if (uniqueArray[i] == elem) {
             elempos = i;
-            //count occurences in posArray
-            for (j = 0; j < bagSizePos; j++) {
-                if (posArray[j] == elempos) {
-                    counter++;
-                }
-            }
-            return counter;
         }
     }
+    
+    // element not found then exit
     if (elempos == -1) {
         return false;
     }
     
-    if (counter > 1) {
-        posArray[j] = posArray[bagSizePos];
-        bagSizePos--;
-        uniqueArray[i] = uniqueArray[bagSizeUnique];
-        bagSizeUnique--;
-        return true;
-    } else {posArray[j] = posArray[bagSizePos];
-        bagSizePos--;
-        return true;
+    // element found, elempos != -1
+    // Find the first occurrence of the element in posArray
+    int posToRemove = -1;
+    for (int j = 0; j < bagSizePos; j++) {
+        if (posArray[j] == elempos) {
+            posToRemove = j;
+            break;
+       }
+    }
+    // If no occurrence is found, return false
+    if (posToRemove == -1) {
+        return false;
+    }
+    
+    // remove pos occurence
+    posArray[posToRemove] = posArray[bagSizePos - 1];
+    bagSizePos--;
+        
+    
+    // if stillexists or not
+    bool stillExists = false;
+    for (int i = 0; i < bagSizePos; i++) {
+        if (posArray[i] == elempos) {
+            stillExists = true;
+            break;
         }
+    }
+    
+    // If no occurrences are left, remove the element from uniqueArray
+    if (!stillExists) {
+       // Swap the element in uniqueArray with the last element
+        uniqueArray[elempos] = uniqueArray[bagSizeUnique - 1];
+    
+        bagSizeUnique--; // Decrease the size of uniqueArray
+
+        // Update posArray to reflect the change in uniqueArray
+        for (int j = 0; j < bagSizePos; j++) {
+            if (posArray[j] == bagSizeUnique) {
+                posArray[j] = elempos; // Update the index of the swapped element
+           }
+       }
+   }
+
+
+    
+    return true;
 }
 
 
